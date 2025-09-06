@@ -9,7 +9,7 @@ use raylib::prelude::*;
 use raytracer::RayTracer;
 
 const WINDOW_WIDTH: i32 = 800;
-const WINDOW_HEIGHT: i32 = 600;
+const WINDOW_HEIGHT: i32 = 700;
 
 fn main() {
     let (mut rl, thread) = raylib::init()
@@ -29,7 +29,7 @@ fn main() {
     let pixel_data = raytracer.render();
     
     let render_time = start_time.elapsed();
-    println!("Ray tracing completed in {:.2} seconds", render_time.as_secs_f32());
+    println!("Ray tracing in {:.2}s", render_time.as_secs_f32());
 
     // Create image from pixel data using the correct function name
     let mut image = Image::gen_image_color(WINDOW_WIDTH, WINDOW_HEIGHT, Color::BLACK);

@@ -15,17 +15,17 @@ pub struct Scene {
 impl Scene {
     pub fn new() -> Self {
         Scene {
-            // Red cube similar to the image
+            // Cubo azul
             cube: Cube::new(
                 Vector3::new(-0.5, 0.0, -0.5),
                 Vector3::new(0.5, 1.0, 0.5),
-                Vector3::new(0.8, 0.2, 0.2), // Red color
+                Vector3::new(0.2, 0.4, 0.8),
             ),
-            // Ground plane positioned exactly at Y=0
+            // Suelo 
             ground: Plane::new(
                 Vector3::new(0.0, 0.0, 0.0),
                 Vector3::new(0.0, 1.0, 0.0),
-                Vector3::new(0.65, 0.7, 0.45), // Olive green similar to reference
+                Vector3::new(0.7, 0.5, 0.3), // Marrón
             ),
             // Directional light from upper left
             directional_light: DirectionalLight::new(
@@ -104,14 +104,14 @@ pub struct RayTracer {
             pub fn new(width: u32, height: u32) -> Self {
                 let aspect_ratio = width as f32 / height as f32;
                 
-                // Position camera to view the cube from an angle similar to the imag
-                let camera = Camera::new(
-            Vector3::new(3.0, 1.5, 2.5),
-            Vector3::new(0.0, 0.5, 0.0),
-            Vector3::new(0.0, 1.0, 0.0),
-            45.0,
-            aspect_ratio,
-        );
+            // Para ver más la cara frontal del cubo
+            let camera = Camera::new(
+                Vector3::new(2.0, 1.0, 3.0),  // Posición de la cámara
+                Vector3::new(0.0, 0.5, 0.0),  // Hacia donde mira
+                Vector3::new(0.0, 1.0, 0.0),  // Vector "up"
+                45.0,
+                aspect_ratio,
+            );
 
         RayTracer {
             width,
