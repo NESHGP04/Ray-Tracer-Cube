@@ -1,16 +1,22 @@
 use crate::vec3::Vector3;
 use crate::ray::{Ray, HitRecord};
+use crate::texture::Texture;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct Cube {
     pub min: Vector3,
     pub max: Vector3,
     pub color: Vector3,
+    pub texture: Option<Texture>,
 }
 
 impl Cube {
     pub fn new(min: Vector3, max: Vector3, color: Vector3) -> Self {
-        Cube { min, max, color }
+        Cube { min, max, color, texture: None }
+    }
+
+    pub fn with_texture(min: Vector3, max: Vector3, texture: Texture) -> Self {
+        Cube { min, max, color: Vector3::zero(), texture: Some(texture) }
     }
 
     pub fn hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
@@ -85,7 +91,34 @@ impl Cube {
             let mut hit_record = HitRecord::new(hit_point, normal, t_near, self.color);
             hit_record.set_face_normal(ray, normal);
             
+            if let Some(tex) = &self.texture {
+                // calcular u,v en base a la cara golpeada
+                let (u, v) = match hit_face {
+                    0 | 1 => {
+                        // X faces: map Y,Z
+                        let u = (hit_point.z - self.min.z) / (self.max.z - self.min.z);
+                        let v = (hit_point.y - self.min.y) / (self.max.y - self.min.y);
+                        (u, v)
+                    }
+                    2 | 3 => {
+                        // Y faces: map X,Z
+                        let u = (hit_point.x - self.min.x) / (self.max.x - self.min.x);
+                        let v = (hit_point.z - self.min.z) / (self.max.z - self.min.z);
+                        (u, v)
+                    }
+                    4 | 5 => {
+                        // Z faces: map X,Y
+                        let u = (hit_point.x - self.min.x) / (self.max.x - self.min.x);
+                        let v = (hit_point.y - self.min.y) / (self.max.y - self.min.y);
+                        (u, v)
+                    }
+                    _ => (0.0, 0.0),
+                };
+
+                hit_record.material_color = tex.sample(u, v);
+            }
             Some(hit_record)
+
         } else {
             None
         }

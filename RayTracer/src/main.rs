@@ -5,6 +5,8 @@ mod cube;
 mod light;
 mod raytracer;
 
+pub mod texture;
+
 use raylib::prelude::*;
 use raytracer::RayTracer;
 

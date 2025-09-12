@@ -3,6 +3,7 @@ use crate::ray::{Ray, HitRecord};
 use crate::camera::Camera;
 use crate::cube::{Cube, Plane};
 use crate::light::{DirectionalLight, AmbientLight};
+use crate::texture::Texture;
 
 pub struct Scene {
     pub cube: Cube,
@@ -16,11 +17,19 @@ impl Scene {
     pub fn new() -> Self {
         Scene {
             // Cubo azul
-            cube: Cube::new(
+            // cube: Cube::new(
+            //     Vector3::new(-0.5, 0.0, -0.5),
+            //     Vector3::new(0.5, 1.0, 0.5),
+            //     Vector3::new(0.2, 0.4, 0.8),
+            //     // Texture::load("../assets/brick.png"),
+            // ),
+
+            cube: Cube::with_texture(
                 Vector3::new(-0.5, 0.0, -0.5),
                 Vector3::new(0.5, 1.0, 0.5),
-                Vector3::new(0.2, 0.4, 0.8),
+                Texture::load("../assets/brick.png"),
             ),
+
             // Suelo 
             ground: Plane::new(
                 Vector3::new(0.0, 0.0, 0.0),
